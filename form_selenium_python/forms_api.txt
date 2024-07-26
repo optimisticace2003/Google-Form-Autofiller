@@ -1,0 +1,617 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import random
+import time
+
+try:
+    # Set up Chrome options
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-gpu')
+
+    # Specify the path to chromedriver.exe using a raw string or escaped backslashes
+    chrome_driver_path = r'C:\Users\manik\Downloads\chromedriver-win32\chromedriver-win32\chromedriver.exe'
+
+    # Initialize WebDriver service
+    service = Service(chrome_driver_path)
+
+    # Initialize WebDriver with ChromeDriver and options
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+
+    try:
+        # Number of times to fill out and submit the form
+        num_responses = 5
+        # Counter for selecting specific option in q2
+        count_q2_i18 = 0
+
+        # Navigate to the Google Form
+        form_url = 'https://docs.google.com/forms/d/e/1FAIpQLScPIEYa2OPoHhovb4hLK4A5ehDTWUoqkIlVe0QHB9PpPbTd1g/viewform?usp=sf_link'
+
+        for _ in range(num_responses):
+            driver.get(form_url)
+
+            # Select the first option (a1) for the first question
+            option_a1_xpath = '//*[@id="i5"]'
+            option_a1 = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, option_a1_xpath)))
+            option_a1.click()
+
+            # Select the option for the second question
+            if count_q2_i18 < 2:
+                # Select specific option for q2
+                option_q2_xpath = '//*[@id="i18"]'
+                count_q2_i18 += 1
+            else:
+                # Select a random option for q2
+                random_option_index = random.choice([19, 20, 21])  # Assuming there are 3 options
+                option_q2_xpath = f'//*[@id="i{random_option_index}"]'
+
+            option_q2 = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, option_q2_xpath)))
+            option_q2.click()
+
+            # Submit the form
+            submit_button_xpath = '//*[@id="mG61Hd"]/div[2]/div/div[3]/div[1]/div[1]/div'
+            submit_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, submit_button_xpath)))
+            submit_button.click()
+
+            # Wait for a while to ensure the form submission is processed
+            time.sleep(5)
+
+    except Exception as e:
+        print(f"Error occurred: {e}")
+
+    finally:
+            driver.quit()
+
+
+except Exception as e:
+    print(f"Error initializing WebDriver: {e}")
+
+
+
+
+
+
+
+
+second draft ----------------------------------------------------------------------------------------------------------------------------
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+
+try:
+    # Set up Chrome options
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-gpu')
+
+    # Specify the path to chromedriver.exe using a raw string or escaped backslashes
+    chrome_driver_path = r'C:\Users\manik\Downloads\chromedriver-win32\chromedriver-win32\chromedriver.exe'
+
+    # Initialize WebDriver service
+    service = Service(chrome_driver_path)
+
+    # Initialize WebDriver with ChromeDriver and options
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+
+    try:
+        # Number of times to fill out and submit the form
+        num_responses = 203
+        
+        # Counters for selecting specific options in each question
+        question_counters = {
+            "q1": [0, 0],  # [count_for_option1, count_for_option2]
+            "q2": [0, 0, 0],
+            "q3": [0, 0, 0, 0, 0, 0],
+            "q4": [0, 0, 0],
+            "q5": [0, 0, 0, 0, 0],
+            "q6": [0, 0, 0, 0, 0],   # Fill in the actual counts for q6
+            "q7": [0, 0, 0, 0, 0],   # Fill in the actual counts for q7
+            "q8": [0, 0, 0, 0, 0],   # Fill in the actual counts for q8
+            "q9": [0, 0, 0, 0, 0],   # Fill in the actual counts for q9
+            "q10": [0, 0, 0, 0, 0],  # Fill in the actual counts for q10
+            "q11": [0, 0, 0, 0, 0],  # Fill in the actual counts for q11
+            "q12": [0, 0, 0, 0, 0],  # Fill in the actual counts for q12
+            "q13": [0, 0, 0, 0, 0],  # Fill in the actual counts for q13
+            "q14": [0, 0, 0, 0, 0],  # Fill in the actual counts for q14
+            "q15": [0, 0, 0, 0, 0],  # Fill in the actual counts for q15
+            "q16": [0, 0, 0, 0, 0],  # Fill in the actual counts for q16
+            "q17": [0, 0, 0, 0, 0],  # Fill in the actual counts for q17
+            "q18": [0, 0, 0, 0, 0],  # Fill in the actual counts for q18
+            "q19": [0, 0, 0, 0, 0],  # Fill in the actual counts for q19
+            "q20": [0, 0, 0, 0, 0],  # Fill in the actual counts for q20
+            "q21": [0, 0, 0, 0, 0],  # Fill in the actual counts for q21
+            "q22": [0, 0, 0, 0, 0],  # Fill in the actual counts for q22
+            "q23": [0, 0, 0, 0, 0],  # Fill in the actual counts for q23
+            "q24": [0, 0, 0, 0, 0],  # Fill in the actual counts for q24
+            "q25": [0, 0, 0, 0, 0],  # Fill in the actual counts for q25
+            "q26": [0, 0, 0, 0, 0],  # Fill in the actual counts for q26
+            "q27": [0, 0, 0, 0, 0],  # Fill in the actual counts for q27
+            "q28": [0, 0, 0, 0, 0],  # Fill in the actual counts for q28
+        }
+
+        # Max counts for each option
+         max_counts = {
+                "q1": [138, 65, 0, 0, 0],
+                "q2": [107, 66, 27, 0, 0],
+                "q3": [28, 42, 60, 21, 25],
+                "q4": [153, 39, 11, 0, 0],
+                "q5": [89, 66, 25, 16, 7],
+                "q6": [59, 76, 11, 37, 20],   # Fill in the actual counts for q6
+                "q7": [44, 84, 13, 40, 22],   # Fill in the actual counts for q7
+                "q8": [33, 64, 22, 52, 32],   # Fill in the actual counts for q8
+                "q9": [38, 77, 17, 39, 32],   # Fill in the actual counts for q9
+                "q10": [48, 63, 15, 48, 29],  # Fill in the actual counts for q10
+                "q11": [33, 92, 12, 53, 36],  # Fill in the actual counts for q11
+                "q12": [82, 43, 17, 40, 21],  # Fill in the actual counts for q12
+                "q13": [51, 82, 11, 34, 25],  # Fill in the actual counts for q13
+                "q14": [62, 45, 18, 47, 31],  # Fill in the actual counts for q14
+                "q15": [52, 72, 13, 39, 27],  # Fill in the actual counts for q15
+                "q16": [52, 70, 14, 44, 23],  # Fill in the actual counts for q16
+                "q17": [39, 81, 18, 44,21],  # Fill in the actual counts for q17
+                "q18": [37, 72, 11, 54, 29],  # Fill in the actual counts for q18
+                "q19": [45, 80, 12, 44, 22,  # Fill in the actual counts for q19
+                "q20": [27, 60, 12, 72, 32],  # Fill in the actual counts for q20
+                "q21": [46, 34, 12, 68, 43],  # Fill in the actual counts for q21
+                "q22": [40, 61, 17, 50, 35],  # Fill in the actual counts for q22
+                "q23": [63, 43, 13, 47, 37],  # Fill in the actual counts for q23
+                "q24": [67, 54, 12, 44, 26],  # Fill in the actual counts for q24
+                "q25": [64, 52, 17, 32, 37],  # Fill in the actual counts for q25
+                "q26": [39, 86, 13, 43, 22],  # Fill in the actual counts for q26
+                "q27": [39, 81, 13, 45, 25],  # Fill in the actual counts for q27
+                "q28": [50, 75, 12, 42, 24],  # Fill in the actual counts for q28
+            }
+
+
+
+        # Mapping question counters to their respective XPaths
+        question_option_xpaths = {
+                "q1": ['//*[@id="i5"]', '//*[@id="i8"]'],  # Add the specific XPaths for each option
+                "q2": ['//*[@id="i15"]', '//*[@id="i18"]', '//*[@id="i21"]'],
+                "q3": ['//*[@id="i28"]', '//*[@id="i31"]', '//*[@id="i34"]', '//*[@id="i37"]', '//*[@id="i40"]', '//*[@id="i43"]'],
+                "q4": ['//*[@id="i50"]', '//*[@id="i53"]', '//*[@id="i56"]'],
+                "q5": ['//*[@id="i63"]', '//*[@id="i66"]', '//*[@id="i69"]', '//*[@id="i72"]', '//*[@id="i75"]'],
+                "q6": ['//*[@id="i82"]', '//*[@id="i85"]', '//*[@id="i88"]', '//*[@id="i91"]', '//*[@id="i94"]'],
+                "q7": ['//*[@id="i101"]', '//*[@id="i104"]', '//*[@id="i107"]', '//*[@id="i110"]', '//*[@id="i113"]'],
+                "q8": ['//*[@id="i120"]', '//*[@id="i123"]', '//*[@id="i126"]', '//*[@id="i129"]', '//*[@id="i132"]'],
+                "q9": ['//*[@id="i139"]', '//*[@id="i142"]', '//*[@id="i145"]', '//*[@id="i148"]', '//*[@id="i151"]'],
+                "q10": ['//*[@id="i158"]', '//*[@id="i161"]', '//*[@id="i164"]', '//*[@id="i167"]', '//*[@id="i170"]'],
+                "q11": ['//*[@id="i177"]', '//*[@id="i180"]', '//*[@id="i183"]', '//*[@id="i186"]', '//*[@id="i189"]'],
+                "q12": ['//*[@id="i196"]', '//*[@id="i199"]', '//*[@id="i202"]', '//*[@id="i205"]', '//*[@id="i208"]'],
+                "q13": ['//*[@id="i215"]', '//*[@id="i218"]', '//*[@id="i221"]', '//*[@id="i224"]', '//*[@id="i227"]'],
+                "q14": ['//*[@id="i234"]', '//*[@id="i237"]', '//*[@id="i240"]', '//*[@id="i243"]', '//*[@id="i246"]'],
+                "q15": ['//*[@id="i253"]', '//*[@id="i256"]', '//*[@id="i259"]', '//*[@id="i262"]', '//*[@id="i265"]'],
+                "q16": ['//*[@id="i272"]', '//*[@id="i275"]', '//*[@id="i278"]', '//*[@id="i281"]', '//*[@id="i284"]'],
+                "q17": ['//*[@id="i291"]', '//*[@id="i294"]', '//*[@id="i297"]', '//*[@id="i300"]', '//*[@id="i303"]'],
+                "q18": ['//*[@id="i310"]', '//*[@id="i313"]', '//*[@id="i316"]', '//*[@id="i319"]', '//*[@id="i322"]'],
+                "q19": ['//*[@id="i329"]', '//*[@id="i332"]', '//*[@id="i335"]', '//*[@id="i338"]', '//*[@id="i341"]'],
+                "q20": ['//*[@id="i351"]', '//*[@id="i354"]', '//*[@id="i357"]', '//*[@id="i360"]', '//*[@id="i363"]'],
+                "q21": ['//*[@id="i367"]', '//*[@id="i370"]', '//*[@id="i373"]', '//*[@id="i376"]', '//*[@id="i379"]'],
+                "q22": ['//*[@id="i386"]', '//*[@id="i389"]', '//*[@id="i392"]', '//*[@id="i395"]', '//*[@id="i398"]'],
+                "q23": ['//*[@id="i405"]', '//*[@id="i408"]', '//*[@id="i411"]', '//*[@id="i414"]', '//*[@id="i417"]'],
+                "q24": ['//*[@id="i424"]', '//*[@id="i3427"]', '//*[@id="i430"]', '//*[@id="i433"]', '//*[@id="i436"]'],
+                "q25": ['//*[@id="i443"]', '//*[@id="i446"]', '//*[@id="i449"]', '//*[@id="i452"]', '//*[@id="i455"]'],
+                "q26": ['//*[@id="i462"]', '//*[@id="i465"]', '//*[@id="i468"]', '//*[@id="i471"]', '//*[@id="i474"]'],
+                "q27": ['//*[@id="i481"]', '//*[@id="i484"]', '//*[@id="i487"]', '//*[@id="i490"]', '//*[@id="i493"]'],
+                "q28": ['//*[@id="i500"]', '//*[@id="i503"]', '//*[@id="i506"]', '//*[@id="i509"]', '//*[@id="i512"]'],
+            }
+
+
+        # Navigate to the Google Form
+        form_url = 'https://docs.google.com/forms/d/e/1FAIpQLScpWQ1KecCdcyTinZv03DiYUN7Fpr9y5DQ5taCAfhNG4teAqg/viewform?usp=sf_link'
+
+        for _ in range(num_responses):
+            driver.get(form_url)
+
+            # Select the options for each question
+            for question, counters in question_counters.items():
+                max_count = max_counts[question]
+                option_xpaths = question_option_xpaths[question]
+
+                for idx, count in enumerate(counters):
+                    if count < max_count[idx]:
+                        option_xpath = option_xpaths[idx]
+                        option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, option_xpath)))
+                        
+                        # Scroll to the element to make sure it's clickable
+                        driver.execute_script("arguments[0].scrollIntoView(true);", option)
+                        
+                        # Attempt to click the element
+                        option.click()
+                        
+                        question_counters[question][idx] += 1
+                        break
+
+            # Submit the form
+            submit_button_xpath = '//*[@id="mG61Hd"]/div[2]/div/div[3]/div[1]/div[1]/div'
+            submit_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, submit_button_xpath)))
+            submit_button.click()
+
+            # Wait for a while to ensure the form submission is processed
+            time.sleep(5)
+
+    except Exception as e:
+        print(f"Error occurred: {e}")
+
+    finally:
+        driver.quit()
+
+except Exception as e:
+    print(f"Error initializing WebDriver: {e}")
+
+indentation error 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+final draft 
+
+
+
+
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+
+try:
+    # Set up Chrome options
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-gpu')
+
+    # Specify the path to chromedriver.exe using a raw string or escaped backslashes
+    chrome_driver_path = r'C:\Users\manik\Downloads\chromedriver-win32\chromedriver-win32\chromedriver.exe'
+
+    # Initialize WebDriver service
+    service = Service(chrome_driver_path)
+
+    # Initialize WebDriver with ChromeDriver and options
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+
+    try:
+        # Number of times to fill out and submit the form
+        num_responses = 203
+        
+        # Counters for selecting specific options in each question
+        question_counters = {
+            "q1": [0, 0],  # [count_for_option1, count_for_option2]
+            "q2": [0, 0, 0],
+            "q3": [0, 0, 0, 0, 0, 0],
+            "q4": [0, 0, 0],
+            "q5": [0, 0, 0, 0, 0],
+            "q6": [0, 0, 0, 0, 0],   # Fill in the actual counts for q6
+            "q7": [0, 0, 0, 0, 0],   # Fill in the actual counts for q7
+            "q8": [0, 0, 0, 0, 0],   # Fill in the actual counts for q8
+            "q9": [0, 0, 0, 0, 0],   # Fill in the actual counts for q9
+            "q10": [0, 0, 0, 0, 0],  # Fill in the actual counts for q10
+            "q11": [0, 0, 0, 0, 0],  # Fill in the actual counts for q11
+            "q12": [0, 0, 0, 0, 0],  # Fill in the actual counts for q12
+            "q13": [0, 0, 0, 0, 0],  # Fill in the actual counts for q13
+            "q14": [0, 0, 0, 0, 0],  # Fill in the actual counts for q14
+            "q15": [0, 0, 0, 0, 0],  # Fill in the actual counts for q15
+            "q16": [0, 0, 0, 0, 0],  # Fill in the actual counts for q16
+            "q17": [0, 0, 0, 0, 0],  # Fill in the actual counts for q17
+            "q18": [0, 0, 0, 0, 0],  # Fill in the actual counts for q18
+            "q19": [0, 0, 0, 0, 0],  # Fill in the actual counts for q19
+            "q20": [0, 0, 0, 0, 0],  # Fill in the actual counts for q20
+            "q21": [0, 0, 0, 0, 0],  # Fill in the actual counts for q21
+            "q22": [0, 0, 0, 0, 0],  # Fill in the actual counts for q22
+            "q23": [0, 0, 0, 0, 0],  # Fill in the actual counts for q23
+            "q24": [0, 0, 0, 0, 0],  # Fill in the actual counts for q24
+            "q25": [0, 0, 0, 0, 0],  # Fill in the actual counts for q25
+            "q26": [0, 0, 0, 0, 0],  # Fill in the actual counts for q26
+            "q27": [0, 0, 0, 0, 0],  # Fill in the actual counts for q27
+            "q28": [0, 0, 0, 0, 0],  # Fill in the actual counts for q28
+        }
+
+        max_counts = {
+            "q1": [138, 65],
+            "q2": [107, 66, 27],
+            "q3": [28, 42, 60, 21, 25],
+            "q4": [153, 39, 11],
+            "q5": [89, 66, 25, 16, 7],
+            "q6": [59, 76, 11, 37, 20],
+            "q7": [44, 84, 13, 40, 22],
+            "q8": [33, 64, 22, 52, 32],
+            "q9": [38, 77, 17, 39, 32],
+            "q10": [48, 63, 15, 48, 29],
+            "q11": [33, 92, 12, 53, 36],
+            "q12": [82, 43, 17, 40, 21],
+            "q13": [51, 82, 11, 34, 25],
+            "q14": [62, 45, 18, 47, 31],
+            "q15": [52, 72, 13, 39, 27],
+            "q16": [52, 70, 14, 44, 23],
+            "q17": [39, 81, 18, 44, 21],
+            "q18": [37, 72, 11, 54, 29],
+            "q19": [45, 80, 12, 44, 22],
+            "q20": [27, 60, 12, 72, 32],
+            "q21": [46, 34, 12, 68, 43],
+            "q22": [40, 61, 17, 50, 35],
+            "q23": [63, 43, 13, 47, 37],
+            "q24": [67, 54, 12, 44, 26],
+            "q25": [64, 52, 17, 32, 37],
+            "q26": [39, 86, 13, 43, 22],
+            "q27": [39, 81, 13, 45, 25],
+            "q28": [50, 75, 12, 42, 24],
+        }
+
+
+
+        # Mapping question counters to their respective XPaths
+        question_option_xpaths = {
+                "q1": ['//*[@id="i5"]', '//*[@id="i8"]'],  # Add the specific XPaths for each option
+                "q2": ['//*[@id="i15"]', '//*[@id="i18"]', '//*[@id="i21"]'],
+                "q3": ['//*[@id="i28"]', '//*[@id="i31"]', '//*[@id="i34"]', '//*[@id="i37"]', '//*[@id="i40"]', '//*[@id="i43"]'],
+                "q4": ['//*[@id="i50"]', '//*[@id="i53"]', '//*[@id="i56"]'],
+                "q5": ['//*[@id="i63"]', '//*[@id="i66"]', '//*[@id="i69"]', '//*[@id="i72"]', '//*[@id="i75"]'],
+                "q6": ['//*[@id="i82"]', '//*[@id="i85"]', '//*[@id="i88"]', '//*[@id="i91"]', '//*[@id="i94"]'],
+                "q7": ['//*[@id="i101"]', '//*[@id="i104"]', '//*[@id="i107"]', '//*[@id="i110"]', '//*[@id="i113"]'],
+                "q8": ['//*[@id="i120"]', '//*[@id="i123"]', '//*[@id="i126"]', '//*[@id="i129"]', '//*[@id="i132"]'],
+                "q9": ['//*[@id="i139"]', '//*[@id="i142"]', '//*[@id="i145"]', '//*[@id="i148"]', '//*[@id="i151"]'],
+                "q10": ['//*[@id="i158"]', '//*[@id="i161"]', '//*[@id="i164"]', '//*[@id="i167"]', '//*[@id="i170"]'],
+                "q11": ['//*[@id="i177"]', '//*[@id="i180"]', '//*[@id="i183"]', '//*[@id="i186"]', '//*[@id="i189"]'],
+                "q12": ['//*[@id="i196"]', '//*[@id="i199"]', '//*[@id="i202"]', '//*[@id="i205"]', '//*[@id="i208"]'],
+                "q13": ['//*[@id="i215"]', '//*[@id="i218"]', '//*[@id="i221"]', '//*[@id="i224"]', '//*[@id="i227"]'],
+                "q14": ['//*[@id="i234"]', '//*[@id="i237"]', '//*[@id="i240"]', '//*[@id="i243"]', '//*[@id="i246"]'],
+                "q15": ['//*[@id="i253"]', '//*[@id="i256"]', '//*[@id="i259"]', '//*[@id="i262"]', '//*[@id="i265"]'],
+                "q16": ['//*[@id="i272"]', '//*[@id="i275"]', '//*[@id="i278"]', '//*[@id="i281"]', '//*[@id="i284"]'],
+                "q17": ['//*[@id="i291"]', '//*[@id="i294"]', '//*[@id="i297"]', '//*[@id="i300"]', '//*[@id="i303"]'],
+                "q18": ['//*[@id="i310"]', '//*[@id="i313"]', '//*[@id="i316"]', '//*[@id="i319"]', '//*[@id="i322"]'],
+                "q19": ['//*[@id="i329"]', '//*[@id="i332"]', '//*[@id="i335"]', '//*[@id="i338"]', '//*[@id="i341"]'],
+                "q20": ['//*[@id="i351"]', '//*[@id="i354"]', '//*[@id="i357"]', '//*[@id="i360"]', '//*[@id="i363"]'],
+                "q21": ['//*[@id="i367"]', '//*[@id="i370"]', '//*[@id="i373"]', '//*[@id="i376"]', '//*[@id="i379"]'],
+                "q22": ['//*[@id="i386"]', '//*[@id="i389"]', '//*[@id="i392"]', '//*[@id="i395"]', '//*[@id="i398"]'],
+                "q23": ['//*[@id="i405"]', '//*[@id="i408"]', '//*[@id="i411"]', '//*[@id="i414"]', '//*[@id="i417"]'],
+                "q24": ['//*[@id="i424"]', '//*[@id="i3427"]', '//*[@id="i430"]', '//*[@id="i433"]', '//*[@id="i436"]'],
+                "q25": ['//*[@id="i443"]', '//*[@id="i446"]', '//*[@id="i449"]', '//*[@id="i452"]', '//*[@id="i455"]'],
+                "q26": ['//*[@id="i462"]', '//*[@id="i465"]', '//*[@id="i468"]', '//*[@id="i471"]', '//*[@id="i474"]'],
+                "q27": ['//*[@id="i481"]', '//*[@id="i484"]', '//*[@id="i487"]', '//*[@id="i490"]', '//*[@id="i493"]'],
+                "q28": ['//*[@id="i500"]', '//*[@id="i503"]', '//*[@id="i506"]', '//*[@id="i509"]', '//*[@id="i512"]'],
+            }
+
+
+        # Navigate to the Google Form
+        form_url = 'https://docs.google.com/forms/d/e/1FAIpQLScpWQ1KecCdcyTinZv03DiYUN7Fpr9y5DQ5taCAfhNG4teAqg/viewform?usp=sf_link'
+
+        for _ in range(num_responses):
+            driver.get(form_url)
+
+            # Select the options for each question
+            for question, counters in question_counters.items():
+                max_count = max_counts[question]
+                option_xpaths = question_option_xpaths[question]
+
+                for idx, count in enumerate(counters):
+                    if count < max_count[idx]:
+                        option_xpath = option_xpaths[idx]
+                        option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, option_xpath)))
+                        
+                        # Scroll to the element to make sure it's clickable
+                        driver.execute_script("arguments[0].scrollIntoView(true);", option)
+                        
+                        # Attempt to click the element
+                        option.click()
+                        
+                        question_counters[question][idx] += 1
+                        break
+
+            # Submit the form
+            submit_button_xpath = '//*[@id="mG61Hd"]/div[2]/div/div[3]/div[1]/div[1]/div'
+            submit_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, submit_button_xpath)))
+            submit_button.click()
+
+            # Wait for a while to ensure the form submission is processed
+            time.sleep(5)
+
+    except Exception as e:
+        print(f"Error occurred: {e}")
+
+    finally:
+        driver.quit()
+
+except Exception as e:
+    print(f"Error initializing WebDriver: {e}")
+
+
+
+----------------Debugging , adjusted x path and logic ----------------------------------------------------------------------------------------------------------
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+
+try:
+    # Set up Chrome options
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-gpu')
+
+    # Specify the path to chromedriver.exe using a raw string or escaped backslashes
+    chrome_driver_path = r'C:\Users\manik\Downloads\chromedriver-win32\chromedriver-win32\chromedriver.exe'
+
+    # Initialize WebDriver service
+    service = Service(chrome_driver_path)
+
+    # Initialize WebDriver with ChromeDriver and options
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+
+    try:
+        # Number of times to fill out and submit the form
+        num_responses = 203
+        
+        # Counters for selecting specific options in each question
+        question_counters = {
+            "q1": [0, 0],  # [count_for_option1, count_for_option2]
+            "q2": [0, 0, 0],
+            "q3": [0, 0, 0, 0, 0, 0],
+            "q4": [0, 0, 0],
+            "q5": [0, 0, 0, 0, 0],
+            "q6": [0, 0, 0, 0, 0],
+            "q7": [0, 0, 0, 0, 0],
+            "q7": [0, 0, 0, 0, 0],   # Fill in the actual counts for q7
+            "q8": [0, 0, 0, 0, 0],   # Fill in the actual counts for q8
+            "q9": [0, 0, 0, 0, 0],   # Fill in the actual counts for q9
+            "q10": [0, 0, 0, 0, 0],  # Fill in the actual counts for q10
+            "q11": [0, 0, 0, 0, 0],  # Fill in the actual counts for q11
+            "q12": [0, 0, 0, 0, 0],  # Fill in the actual counts for q12
+            "q13": [0, 0, 0, 0, 0],  # Fill in the actual counts for q13
+            "q14": [0, 0, 0, 0, 0],  # Fill in the actual counts for q14
+            "q15": [0, 0, 0, 0, 0],  # Fill in the actual counts for q15
+            "q16": [0, 0, 0, 0, 0],  # Fill in the actual counts for q16
+            "q17": [0, 0, 0, 0, 0],  # Fill in the actual counts for q17
+            "q18": [0, 0, 0, 0, 0],  # Fill in the actual counts for q18
+            "q19": [0, 0, 0, 0, 0],  # Fill in the actual counts for q19
+            "q20": [0, 0, 0, 0, 0],  # Fill in the actual counts for q20
+            "q21": [0, 0, 0, 0, 0],  # Fill in the actual counts for q21
+            "q22": [0, 0, 0, 0, 0],  # Fill in the actual counts for q22
+            "q23": [0, 0, 0, 0, 0],  # Fill in the actual counts for q23
+            "q24": [0, 0, 0, 0, 0],  # Fill in the actual counts for q24
+            "q25": [0, 0, 0, 0, 0],  # Fill in the actual counts for q25
+            "q26": [0, 0, 0, 0, 0],  # Fill in the actual counts for q26
+            "q27": [0, 0, 0, 0, 0],  # Fill in the actual counts for q27
+            "q28": [0, 0, 0, 0, 0],  # Fill in the actual counts for q28
+
+        }
+
+        max_counts = {
+            "q1": [138, 65],
+            "q2": [107, 66, 27],
+            "q3": [28, 42, 60, 21, 25],
+            "q4": [153, 39, 11],
+            "q5": [89, 66, 25, 16, 7],
+            "q6": [59, 76, 11, 37, 20],
+            "q7": [44, 84, 13, 40, 22],
+            "q8": [33, 64, 22, 52, 32],
+            "q9": [38, 77, 17, 39, 32],
+            "q10": [48, 63, 15, 48, 29],
+            "q11": [33, 92, 12, 53, 36],
+            "q12": [82, 43, 17, 40, 21],
+            "q13": [51, 82, 11, 34, 25],
+            "q14": [62, 45, 18, 47, 31],
+            "q15": [52, 72, 13, 39, 27],
+            "q16": [52, 70, 14, 44, 23],
+            "q17": [39, 81, 18, 44, 21],
+            "q18": [37, 72, 11, 54, 29],
+            "q19": [45, 80, 12, 44, 22],
+            "q20": [27, 60, 12, 72, 32],
+            "q21": [46, 34, 12, 68, 43],
+            "q22": [40, 61, 17, 50, 35],
+            "q23": [63, 43, 13, 47, 37],
+            "q24": [67, 54, 12, 44, 26],
+            "q25": [64, 52, 17, 32, 37],
+            "q26": [39, 86, 13, 43, 22],
+            "q27": [39, 81, 13, 45, 25],
+            "q28": [50, 75, 12, 42, 24],
+        }
+
+
+        # Mapping question counters to their respective XPaths
+        question_option_xpaths = {
+            "q1": ['//*[@id="i5"]', '//*[@id="i8"]'],  # Add the specific XPaths for each option
+            "q2": ['//*[@id="i15"]', '//*[@id="i18"]', '//*[@id="i21"]'],
+            "q3": ['//*[@id="i28"]', '//*[@id="i31"]', '//*[@id="i34"]', '//*[@id="i37"]', '//*[@id="i40"]', '//*[@id="i43"]'],
+            "q4": ['//*[@id="i50"]', '//*[@id="i53"]', '//*[@id="i56"]'],
+            "q5": ['//*[@id="i63"]', '//*[@id="i66"]', '//*[@id="i69"]', '//*[@id="i72"]', '//*[@id="i75"]'],
+            "q6": ['//*[@id="i82"]', '//*[@id="i85"]', '//*[@id="i88"]', '//*[@id="i91"]', '//*[@id="i94"]'],
+            "q7": ['//*[@id="i101"]', '//*[@id="i104"]', '//*[@id="i107"]', '//*[@id="i110"]', '//*[@id="i113"]'],
+            "q8": ['//*[@id="i120"]', '//*[@id="i123"]', '//*[@id="i126"]', '//*[@id="i129"]', '//*[@id="i132"]'],
+            "q9": ['//*[@id="i139"]', '//*[@id="i142"]', '//*[@id="i145"]', '//*[@id="i148"]', '//*[@id="i151"]'],
+            "q10": ['//*[@id="i158"]', '//*[@id="i161"]', '//*[@id="i164"]', '//*[@id="i167"]', '//*[@id="i170"]'],
+            "q11": ['//*[@id="i177"]', '//*[@id="i180"]', '//*[@id="i183"]', '//*[@id="i186"]', '//*[@id="i189"]'],
+            "q12": ['//*[@id="i196"]', '//*[@id="i199"]', '//*[@id="i202"]', '//*[@id="i205"]', '//*[@id="i208"]'],
+            "q13": ['//*[@id="i215"]', '//*[@id="i218"]', '//*[@id="i221"]', '//*[@id="i224"]', '//*[@id="i227"]'],
+            "q14": ['//*[@id="i234"]', '//*[@id="i237"]', '//*[@id="i240"]', '//*[@id="i243"]', '//*[@id="i246"]'],
+            "q15": ['//*[@id="i253"]', '//*[@id="i256"]', '//*[@id="i259"]', '//*[@id="i262"]', '//*[@id="i265"]'],
+            "q16": ['//*[@id="i272"]', '//*[@id="i275"]', '//*[@id="i278"]', '//*[@id="i281"]', '//*[@id="i284"]'],
+            "q17": ['//*[@id="i291"]', '//*[@id="i294"]', '//*[@id="i297"]', '//*[@id="i300"]', '//*[@id="i303"]'],
+            "q18": ['//*[@id="i310"]', '//*[@id="i313"]', '//*[@id="i316"]', '//*[@id="i319"]', '//*[@id="i322"]'],
+            "q19": ['//*[@id="i329"]', '//*[@id="i332"]', '//*[@id="i335"]', '//*[@id="i338"]', '//*[@id="i341"]'],
+            "q20": ['//*[@id="i351"]', '//*[@id="i354"]', '//*[@id="i357"]', '//*[@id="i360"]', '//*[@id="i363"]'],
+            "q21": ['//*[@id="i367"]', '//*[@id="i370"]', '//*[@id="i373"]', '//*[@id="i376"]', '//*[@id="i379"]'],
+            "q22": ['//*[@id="i386"]', '//*[@id="i389"]', '//*[@id="i392"]', '//*[@id="i395"]', '//*[@id="i398"]'],
+            "q23": ['//*[@id="i405"]', '//*[@id="i408"]', '//*[@id="i411"]', '//*[@id="i414"]', '//*[@id="i417"]'],
+            "q24": ['//*[@id="i424"]', '//*[@id="i3427"]', '//*[@id="i430"]', '//*[@id="i433"]', '//*[@id="i436"]'],
+            "q25": ['//*[@id="i443"]', '//*[@id="i446"]', '//*[@id="i449"]', '//*[@id="i452"]', '//*[@id="i455"]'],
+            "q26": ['//*[@id="i462"]', '//*[@id="i465"]', '//*[@id="i468"]', '//*[@id="i471"]', '//*[@id="i474"]'],
+            "q27": ['//*[@id="i481"]', '//*[@id="i484"]', '//*[@id="i487"]', '//*[@id="i490"]', '//*[@id="i493"]'],
+            "q28": ['//*[@id="i500"]', '//*[@id="i503"]', '//*[@id="i506"]', '//*[@id="i509"]', '//*[@id="i512"]'],
+            
+        }
+
+        # Navigate to the Google Form
+        form_url = 'https://docs.google.com/forms/d/e/1FAIpQLSfoxFqqnAIS3ougyyTE9exuP43yerR-heqpKbTXsd_eeJUhww/viewform?usp=sf_link'
+
+        for response_number in range(num_responses):
+            try:
+                driver.get(form_url)
+                print(f"Processing response {response_number + 1}...")
+
+                # Select the options for each question
+                for question, counters in question_counters.items():
+                    max_count = max_counts[question]
+                    option_xpaths = question_option_xpaths[question]
+
+                    for idx, count in enumerate(counters):
+                        if count < max_count[idx]:
+                            option_xpath = option_xpaths[idx]
+                            try:
+                                option = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, option_xpath)))
+                                # Scroll to the element to make sure it's clickable
+                                driver.execute_script("arguments[0].scrollIntoView(true);", option)
+                                # Attempt to click the element
+                                option.click()
+                                question_counters[question][idx] += 1
+                                print(f"{question} option {idx + 1} selected {question_counters[question][idx]} times.")
+                                break
+                            except Exception as e:
+                                print(f"Failed to select option for {question} option {idx + 1}: {e}")
+                                continue
+
+                # Submit the form
+                try:
+                    submit_button_xpath = '//*[@id="mG61Hd"]/div[2]/div/div[3]/div[1]/div[1]/div'
+                    submit_button = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, submit_button_xpath)))
+                    submit_button.click()
+                    print("Form submitted successfully.")
+                except Exception as e:
+                    print(f"Failed to submit the form: {e}")
+
+                # Wait for a while to ensure the form submission is processed
+                time.sleep(10)
+
+            except Exception as e:
+                print(f"Error occurred during response {response_number + 1}: {e}")
+                continue  # Proceed to the next response
+
+    except Exception as e:
+        print(f"Error occurred: {e}")
+
+    finally:
+        driver.quit()
+
+except Exception as e:
+    print(f"Error initializing WebDriver: {e}")
+
+
+
+
+
